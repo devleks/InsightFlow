@@ -1,0 +1,55 @@
+# Configuration for InsightFlow RAG Application
+
+# --- Data Source Configuration ---
+data_source:
+  type: directory # Options: pdf, directory, etc. (determines loader)
+  path: "./documents" # Path to the single PDF or directory of documents
+  # encoding: "UTF-8" # Optional: Specify encoding if needed for text files
+
+# --- Vector Store Configuration ---
+vector_store:
+  type: chroma # Options: chroma, faiss, etc.
+  persist_directory: "./vector_db" # Directory to save/load the vector store
+  collection_name: "insightflow_collection" # Name for the collection within the store
+
+# --- Text Splitter Configuration ---
+text_splitter:
+  chunk_size: 1000 # Target size for each document chunk
+  chunk_overlap: 200 # Number of characters to overlap between chunks
+
+# --- Embedding Model Configuration ---
+embedding_model:
+  provider: openai # Options: openai, azure, huggingface, etc.
+  model_name: "text-embedding-3-small" # Specific model name (e.g., text-embedding-3-small, text-embedding-ada-002)
+  # api_key_env: "OPENAI_API_KEY" # Environment variable for the API key (default based on provider)
+
+# --- Language Model (LLM) Configuration ---
+llm:
+  provider: openai # Options: openai, azure, groq, anthropic, etc.
+  model_name: "gpt-4o-mini" # Specific model name (e.g., gpt-3.5-turbo, gpt-4, llama3-8b-8192)
+  temperature: 0.7
+  # api_key_env: "OPENAI_API_KEY" # Environment variable for the API key (default based on provider)
+
+# --- RAG Prompt Configuration ---
+prompt:
+  system_template: |
+    You are an assistant for question-answering tasks. Use the following pieces of retrieved context to answer the question. 
+    If you don't know the answer, just say that you don't know. Use three sentences maximum and keep the answer concise.
+    Context: {context}
+  human_template: "Question: {question}"
+
+# --- Input Filtering (Optional) ---
+input_filter:
+  enabled: true # Set to false to disable input safety checks
+  provider: groq # Options: groq (for Llama Guard), etc.
+  model_name: "llama-guard-3-8b" # Specific model (e.g., llama-guard-3-8b)
+  api_key_env: "GROQ_API_KEY"
+
+# --- Streamlit UI Configuration ---
+ui:
+  page_title: "DocuChat InsightFlow"
+  page_icon: "page_with_curl"
+  title: "DocuChat InsightFlow"
+  header: "Chat with your documents to gain instant insights"
+  # input_label: "Ask your question:"
+  # chat_placeholder: "Your documents' insights await..."
